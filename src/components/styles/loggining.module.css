@@ -36,6 +36,12 @@
     object-position: center top;
 }
 
+.error {
+    color: #ff4747;
+    font-size: 14px;
+    text-align: left;
+}
+
 .inputAuth {
     position: relative;
     padding: 10px 10px 10px;

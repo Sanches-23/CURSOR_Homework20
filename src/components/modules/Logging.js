@@ -82,28 +82,31 @@
 //
 // export default Logging;
 
+// useEffect(() => {
+//     const storedEmail = localStorage.getItem('savedEmail');
+//     const storedPassword = localStorage.getItem('savedPassword');
+//
+//     if (rememberMe && storedEmail && storedPassword) {
+//         setEmail(storedEmail);
+//         setPassword(storedPassword);
+//     }
+// }, [rememberMe]);
+
 import loggingStyle from "../styles/loggining.module.css";
 import padlockIcon from "../utils/padlock.png"
 
-import React, {useEffect, useLayoutEffect, useState} from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import { useForm } from 'react-hook-form';
 
 function Logging() {
     const [rememberMe, setRememberMe] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [email, setEmail] = useState(localStorage.getItem('savedEmail') || '');
+    const [password, setPassword] = useState(localStorage.getItem('savedPassword') || '');
+    const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
-    useEffect(() => {
-        const storedEmail = localStorage.getItem('savedEmail');
-        const storedPassword = localStorage.getItem('savedPassword');
-
-        if (rememberMe && storedEmail && storedPassword) {
-            setEmail(storedEmail);
-            setPassword(storedPassword);
-        }
-    }, [rememberMe]);
+    const watchEmail = watch('email');
+    const watchPassword = watch('password');
 
     const onSubmit = (data) => {
         if (rememberMe) {
@@ -113,6 +116,7 @@ function Logging() {
             localStorage.removeItem('savedEmail');
             localStorage.removeItem('savedPassword');
         }
+
         const userData = JSON.parse(localStorage.getItem("userData"));
         if (userData && userData.email === data.email && userData.password === data.password) {
             console.log("User logged in successfully!");
@@ -130,62 +134,81 @@ function Logging() {
                         <img
                             className={loggingStyle.image}
                             src={padlockIcon}
-                            alt={"home-img-cat"}
+                            alt={"img"}
                         />
                     </div>
                 </div>
                 <h2>Sign In</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className={loggingStyle.wrapper}>
                             {errors.email && (
-                                <p className="error">{errors.email.message}</p>
+                                <p className={loggingStyle.error}>{errors.email.message}</p>
                             )}
                     <input className={loggingStyle.inputAuth}
                            type="text"
                            placeholder="Email Address"
                            {...register('email', {
-                               required: 'Email Address is required',
+                               required: 'Email Address is required*',
                                minLength: {
                                    value: 3,
-                                   message: 'Email Address must be at least 3 characters long',
+                                   message: 'Email Address must be at least 3 characters long*',
                                },
                                maxLength: {
                                    value: 20,
-                                   message: 'Email Address must not exceed 20 characters',
+                                   message: 'Email Address must not exceed 20 characters*',
                                },
                                pattern: {
-                                   value: /^[a-zA-Z0-9._]+@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
-                                   message: 'Email Address can only contain letters, numbers and _ . -',
+                                   value: /^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
+                                   message: 'Email Address must look like this: ааа@аа.аа*',
                                },
                            })}
                            value={email}
                            onChange={(e) => setEmail(e.target.value)}
-                           // disabled={rememberMe}
+                           autoComplete={rememberMe ? "email" : "off"}
+                           style={{
+                               borderColor: watchEmail
+                                   ? errors.email
+                                       ? 'red'
+                                       : 'green'
+                                   : !errors.email
+                                       ? 'grey'
+                                       : 'red',
+                           }}
+                        // style={{ borderColor: email ? (errors.email ? "red" : "green") : (!errors.email ? "grey" : "red") }}
                     />
                             {errors.password && (
-                                <p className="error">{errors.password.message}</p>
+                                <p className={loggingStyle.error}>{errors.password.message}</p>
                             )}
                     <input  className={loggingStyle.inputAuth}
                             type="password"
                             placeholder="Password"
                             {...register('password',{
-                                required: 'Password is required',
+                                required: 'Password is required*',
                                 minLength: {
                                     value: 8,
-                                    message: 'Password must be at least 8 characters long',
+                                    message: 'Password must be at least 8 characters long*',
                                 },
                                 maxLength: {
                                     value: 28,
-                                    message: 'Password must not exceed 28 characters',
+                                    message: 'Password must not exceed 28 characters*',
                                 },
                                 pattern: {
                                     value: /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9_.-]+$/,
                                     message: 'The password can contain at least 1 lowercase and 1 ' +
-                                        'uppercase letter without special symbols',
+                                        'uppercase letter without special symbols*',
                                 },
                             })}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            // disabled={rememberMe}
+                            autoComplete={rememberMe ? "password" : "off"}
+                            style={{
+                                borderColor: watchPassword
+                                    ? errors.password
+                                        ? 'red'
+                                        : 'green'
+                                    : !errors.password
+                                        ? 'grey'
+                                        : 'red',
+                            }}
                     />
                     <label className={loggingStyle.labelCheckbox}>
                         <input className={loggingStyle.checkbox}
@@ -199,6 +222,7 @@ function Logging() {
                     </label>
                     <button className={loggingStyle.btn}
                             type="submit"
+                            style={{background: Object.keys(errors).length > 0 ? 'grey' : ''}}
                     >
                         Sign In
                     </button>
@@ -206,10 +230,10 @@ function Logging() {
 
                 <div className={loggingStyle.links}>
                     <p>
-                        <Link to="/signup">Forgot password?</Link>
+                        <Link to="/auth/Registration">Forgot password?</Link>
                     </p>
                     <p>
-                        <Link to="/signup">Don't have an account? Sign Up</Link>
+                        <Link to="/auth/Registration">Don't have an account? Sign Up</Link>
                     </p>
                 </div>
 

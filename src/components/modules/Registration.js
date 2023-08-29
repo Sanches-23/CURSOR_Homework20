@@ -103,9 +103,14 @@ import { useForm } from 'react-hook-form';
 import loggingStyle from "../styles/loggining.module.css";
 
 function Registration() {
-    const [mailing, setMailing] = useState(false); // New state for "Remember me"
+    const [mailing, setMailing] = useState(false);
     const { register, handleSubmit, formState: { errors }  } = useForm();
     const onSubmit = (data) => {
+        if (mailing){
+            setInterval(() => {
+                console.log("MAILING APPROVED!")
+            },500)
+        }
         localStorage.setItem("userData", JSON.stringify(data));
         console.log(data);
     };
@@ -124,88 +129,102 @@ function Registration() {
                 </div>
                 <h2>Sign Up</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className={registrationStyle.wrapper}>
+                    <div className={registrationStyle.fullNameInputs}>
                             {errors.firstName && (
-                                <p className="error">{errors.firstName.message}</p>
+                                <p className={registrationStyle.error}>{errors.firstName.message}</p>
                             )}
                             {errors.lastName && (
-                                <p className="error">{errors.lastName.message}</p>
+                                <p className={registrationStyle.error}>{errors.lastName.message}</p>
                             )}
+                    </div>
                     <div className={registrationStyle.fullNameInputs}>
                         <input className={registrationStyle.inputAuth}
                                type="text"
                                placeholder="First name"
                                {...register('firstName', {
-                                   required: 'FirstName is required',
+                                   required: 'FirstName is required*',
                                    minLength: {
                                        value: 3,
-                                       message: 'FirstName must be at least 3 characters long',
+                                       message: 'FirstName must be at least 3 characters long*',
                                    },
                                    maxLength: {
                                        value: 23,
-                                       message: 'FirstName must not exceed 23 characters',
+                                       message: 'FirstName must not exceed 23 characters*',
                                    },
                                })}
+                               style={{
+                                   borderColor: errors.firstName === undefined ? 'grey' : errors.firstName ? 'red' : 'green'
+                               }}
                         />
                         <input className={registrationStyle.inputAuth}
                                type="text"
                                placeholder="Last name"
                                {...register('lastName', {
-                                   required: 'LastName is required',
+                                   required: 'LastName is required*',
                                    minLength: {
                                        value: 3,
-                                       message: 'LastName must be at least 3 characters long',
+                                       message: 'LastName must be at least 3 characters long*',
                                    },
                                    maxLength: {
                                        value: 23,
-                                       message: 'LastName must not exceed 23 characters',
+                                       message: 'LastName must not exceed 23 characters*',
                                    },
                                })}
+                            style={{
+                                borderColor: errors.lastName === undefined ? 'grey' : errors.lastName ? 'red' : 'green'
+                            }}
                         />
                     </div>
                             {errors.email && (
-                                <p className="error">{errors.email.message}</p>
+                                <p className={registrationStyle.error}>{errors.email.message}</p>
                             )}
                     <input className={loggingStyle.inputAuth}
                            type="text"
                            placeholder="Email Address"
                            {...register('email', {
-                               required: 'Email Address is required',
+                               required: 'Email Address is required*',
                                minLength: {
                                    value: 9,
-                                   message: 'Email Address must be at least 9 characters long',
+                                   message: 'Email Address must be at least 9 characters long*',
                                },
                                maxLength: {
                                    value: 35,
-                                   message: 'Email Address must not exceed 35 characters',
+                                   message: 'Email Address must not exceed 35 characters*',
                                },
                                pattern: {
                                    value: /^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
-                                   message: 'Email Address must look like this: ааа@аа.аа',
+                                   message: 'Email Address must look like this: ааа@аа.аа *',
                                },
                            })}
+                           style={{
+                               borderColor: errors.email === undefined ? 'grey' : errors.email ? 'red' : 'green'
+                           }}
                     />
                             {errors.password && (
-                                <p className="error">{errors.password.message}</p>
+                                <p className={registrationStyle.error}>{errors.password.message}</p>
                             )}
                     <input className={registrationStyle.inputAuth}
                            type="password"
                            placeholder="Password"
                            {...register('password',{
-                               required: 'Password is required',
+                               required: 'Password is required*',
                                minLength: {
                                    value: 8,
-                                   message: 'Password must be at least 8 characters long',
+                                   message: 'Password must be at least 8 characters long*',
                                },
                                maxLength: {
                                    value: 28,
-                                   message: 'Password must not exceed 28 characters',
+                                   message: 'Password must not exceed 28 characters*',
                                },
                                pattern: {
                                    value: /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9_.-]+$/,
                                    message: 'The password can contain at least 1 lowercase and 1 ' +
-                                       'uppercase letter without special symbols',
+                                       'uppercase letter without special symbols*',
                                },
                            })}
+                           style={{
+                               borderColor: errors.password === undefined ? 'grey' : errors.password ? 'red' : 'green'
+                           }}
                     />
                     <label className={registrationStyle.labelCheckbox}>
                         <input className={registrationStyle.checkbox}
@@ -225,7 +244,7 @@ function Registration() {
                 </form>
                 <div className={registrationStyle.links}>
                     <p>
-                        <Link to="/signup">Already have an account? Sign Ip</Link>
+                        <Link to="/auth/Logging">Already have an account? Sign In</Link>
                     </p>
                 </div>
                 <div className={registrationStyle.footer}>
