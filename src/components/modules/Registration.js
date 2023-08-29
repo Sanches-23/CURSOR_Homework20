@@ -100,28 +100,15 @@ import padlockIcon from "../utils/padlock.png"
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import { useForm } from 'react-hook-form';
+import loggingStyle from "../styles/loggining.module.css";
 
 function Registration() {
-
-    // const [firstName, setFirstName] = useState("");
-    // const [lastName, setLastName] = useState("");
-    //
-    // const [username, setUsername] = useState("");
-    // const [password, setPassword] = useState("");
-    //
     const [mailing, setMailing] = useState(false); // New state for "Remember me"
-    // const handleSignUp = () => {
-    //     const userData = {firstName, lastName, username, password};
-    //     localStorage.setItem("userData", JSON.stringify(userData));
-    //     console.log("User registered successfully!");
-    // };
-
     const { register, handleSubmit, formState: { errors }  } = useForm();
     const onSubmit = (data) => {
         localStorage.setItem("userData", JSON.stringify(data));
-        console.log(data); // Do your registration logic here
+        console.log(data);
     };
-
 
     return (
         <div className={registrationStyle.container}>
@@ -175,25 +162,25 @@ function Registration() {
                                })}
                         />
                     </div>
-                            {errors.username && (
-                                <p className="error">{errors.username.message}</p>
+                            {errors.email && (
+                                <p className="error">{errors.email.message}</p>
                             )}
-                    <input className={registrationStyle.inputAuth}
+                    <input className={loggingStyle.inputAuth}
                            type="text"
-                           placeholder="Username"
-                           {...register('username', {
-                               required: 'Username is required',
+                           placeholder="Email Address"
+                           {...register('email', {
+                               required: 'Email Address is required',
                                minLength: {
-                                   value: 3,
-                                   message: 'Username must be at least 3 characters long',
+                                   value: 9,
+                                   message: 'Email Address must be at least 9 characters long',
                                },
                                maxLength: {
-                                   value: 20,
-                                   message: 'Username must not exceed 20 characters',
+                                   value: 35,
+                                   message: 'Email Address must not exceed 35 characters',
                                },
                                pattern: {
-                                   value: /^[a-zA-Z0-9_.-]+$/,
-                                   message: 'Username can only contain letters, numbers and _ . -',
+                                   value: /^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
+                                   message: 'Email Address must look like this: ааа@аа.аа',
                                },
                            })}
                     />
@@ -232,7 +219,6 @@ function Registration() {
                     </label>
                     <button className={registrationStyle.btn}
                             type="submit"
-                            // onClick={handleSignUp}
                         >
                         Sign Up
                     </button>
