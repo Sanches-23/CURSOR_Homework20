@@ -66,6 +66,7 @@
 
 .inputAuth:focus {
     border: 3px solid #c8c8c8;
+    /*transition: all ease 0.3s;*/
     transition: 0.5s;
 }
 

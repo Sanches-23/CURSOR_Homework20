@@ -36,6 +36,10 @@
     object-position: center top;
 }
 
+.formAuth {
+    display: flex;
+}
+
 .inputAuth {
     position: relative;
     padding: 10px 10px 10px;
@@ -91,7 +95,7 @@
 
 .links {
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
 }
 .links a{
     color: cornflowerblue;

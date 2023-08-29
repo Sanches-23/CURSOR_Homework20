@@ -5,10 +5,12 @@ import Navbar from "./utils/Navbar";
 import Logging from "./modules/Logging";
 import Registration from "./modules/Registration";
 import HomePage from "./modules/HomePage";
+import { FormProvider } from 'react-hook-form';
 
 function App() {
   return (
       <>
+    <FormProvider>
       <Navbar/>
           <div className={AppStyle.App}>
               <Routes>
@@ -19,6 +21,7 @@ function App() {
                   </Route>
               </Routes>
           </div>
+    </FormProvider>
       </>
   );
 }
