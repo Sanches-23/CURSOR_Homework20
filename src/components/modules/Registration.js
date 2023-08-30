@@ -100,11 +100,10 @@ import padlockIcon from "../utils/padlock.png"
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import { useForm } from 'react-hook-form';
-import loggingStyle from "../styles/loggining.module.css";
 
 function Registration() {
     const [mailing, setMailing] = useState(false);
-    const { register, handleSubmit, formState: { errors }  } = useForm();
+    const { register, handleSubmit, formState: { errors }, watch, trigger  } = useForm();
     const onSubmit = (data) => {
         if (mailing){
             setInterval(() => {
@@ -151,10 +150,15 @@ function Registration() {
                                        value: 23,
                                        message: 'FirstName must not exceed 23 characters*',
                                    },
-                               })}
-                               style={{
-                                   borderColor: errors.firstName === undefined ? 'grey' : errors.firstName ? 'red' : 'green'
-                               }}
+                                   onChange: () => trigger('firstName')},
+                               )}
+                                style={{
+                                borderColor: errors.firstName
+                                    ? 'red'
+                                    : watch('firstName')
+                                        ? 'green'
+                                        : 'grey',
+                            }}
                         />
                         <input className={registrationStyle.inputAuth}
                                type="text"
@@ -169,16 +173,21 @@ function Registration() {
                                        value: 23,
                                        message: 'LastName must not exceed 23 characters*',
                                    },
-                               })}
-                            style={{
-                                borderColor: errors.lastName === undefined ? 'grey' : errors.lastName ? 'red' : 'green'
-                            }}
+                                   onChange: () => trigger('lastName')},
+                               )}
+                               style={{
+                                   borderColor: errors.lastName
+                                       ? 'red'
+                                       : watch('lastName')
+                                           ? 'green'
+                                           : 'grey',
+                               }}
                         />
                     </div>
                             {errors.email && (
                                 <p className={registrationStyle.error}>{errors.email.message}</p>
                             )}
-                    <input className={loggingStyle.inputAuth}
+                    <input className={registrationStyle.inputAuth}
                            type="text"
                            placeholder="Email Address"
                            {...register('email', {
@@ -195,9 +204,14 @@ function Registration() {
                                    value: /^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
                                    message: 'Email Address must look like this: ааа@аа.аа *',
                                },
-                           })}
+                               onChange: () => trigger('email')},
+                           )}
                            style={{
-                               borderColor: errors.email === undefined ? 'grey' : errors.email ? 'red' : 'green'
+                               borderColor: errors.email
+                                   ? 'red'
+                                   : watch('email')
+                                       ? 'green'
+                                       : 'grey',
                            }}
                     />
                             {errors.password && (
@@ -221,9 +235,14 @@ function Registration() {
                                    message: 'The password can contain at least 1 lowercase and 1 ' +
                                        'uppercase letter without special symbols*',
                                },
-                           })}
+                               onChange: () => trigger('password')},
+                           )}
                            style={{
-                               borderColor: errors.password === undefined ? 'grey' : errors.password ? 'red' : 'green'
+                               borderColor: errors.password
+                                   ? 'red'
+                                   : watch('password')
+                                       ? 'green'
+                                       : 'grey',
                            }}
                     />
                     <label className={registrationStyle.labelCheckbox}>
@@ -238,7 +257,8 @@ function Registration() {
                     </label>
                     <button className={registrationStyle.btn}
                             type="submit"
-                        >
+                            style={{background: Object.keys(errors).length > 0 ? 'grey' : ''}}
+                    >
                         Sign Up
                     </button>
                 </form>

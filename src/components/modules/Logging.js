@@ -103,22 +103,18 @@ function Logging() {
     const [rememberMe, setRememberMe] = useState(false);
     const [email, setEmail] = useState(localStorage.getItem('savedEmail') || '');
     const [password, setPassword] = useState(localStorage.getItem('savedPassword') || '');
-    const { register, handleSubmit, formState: { errors }, watch } = useForm();
-
-    const watchEmail = watch('email');
-    const watchPassword = watch('password');
+    const { register, handleSubmit, formState: { errors }, watch, trigger } = useForm();
 
     const onSubmit = (data) => {
-        if (rememberMe) {
-            localStorage.setItem('savedEmail', data.email);
-            localStorage.setItem('savedPassword', data.password);
-        } else {
-            localStorage.removeItem('savedEmail');
-            localStorage.removeItem('savedPassword');
-        }
-
         const userData = JSON.parse(localStorage.getItem("userData"));
         if (userData && userData.email === data.email && userData.password === data.password) {
+            if (rememberMe) {
+                localStorage.setItem('savedEmail', data.email);
+                localStorage.setItem('savedPassword', data.password);
+            } else {
+                localStorage.removeItem('savedEmail');
+                localStorage.removeItem('savedPassword');
+            }
             console.log("User logged in successfully!");
         } else {
             console.log("Invalid email or password");
@@ -126,7 +122,16 @@ function Logging() {
         console.log(data);
     };
 
-    return (
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+        trigger('email');
+    };
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        trigger('password');
+    };
+
+        return (
         <div className={loggingStyle.container}>
             <div className={loggingStyle.wrapper}>
                 <div className={loggingStyle.imageContainer}>
@@ -160,20 +165,17 @@ function Logging() {
                                    value: /^[a-zA-Z0-9._]{3,}@[a-zA-Z0-9-.]+\.[a-zA-Z]{2,}$/,
                                    message: 'Email Address must look like this: ааа@аа.аа*',
                                },
-                           })}
+                               onChange: (e) => handleEmailChange(e)},
+                           )}
                            value={email}
-                           onChange={(e) => setEmail(e.target.value)}
                            autoComplete={rememberMe ? "email" : "off"}
                            style={{
-                               borderColor: watchEmail
-                                   ? errors.email
-                                       ? 'red'
-                                       : 'green'
-                                   : !errors.email
-                                       ? 'grey'
-                                       : 'red',
+                               borderColor: errors.email
+                                   ? 'red'
+                                   : watch('email')
+                                       ? 'green'
+                                       : 'grey',
                            }}
-                        // style={{ borderColor: email ? (errors.email ? "red" : "green") : (!errors.email ? "grey" : "red") }}
                     />
                             {errors.password && (
                                 <p className={loggingStyle.error}>{errors.password.message}</p>
@@ -196,20 +198,18 @@ function Logging() {
                                     message: 'The password can contain at least 1 lowercase and 1 ' +
                                         'uppercase letter without special symbols*',
                                 },
-                            })}
+                                onChange: (e) => handlePasswordChange(e)},
+                            )}
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
                             autoComplete={rememberMe ? "password" : "off"}
                             style={{
-                                borderColor: watchPassword
-                                    ? errors.password
-                                        ? 'red'
-                                        : 'green'
-                                    : !errors.password
-                                        ? 'grey'
-                                        : 'red',
+                                borderColor: errors.password
+                                    ? 'red'
+                                    : watch('password')
+                                        ? 'green'
+                                        : 'grey',
                             }}
-                    />
+                        />
                     <label className={loggingStyle.labelCheckbox}>
                         <input className={loggingStyle.checkbox}
                                type="checkbox"
