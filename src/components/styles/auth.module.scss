@@ -1,0 +1,128 @@
+$color_1: #c8c8c8;
+$color_2: #ff4747;
+$color_3: #4f556e;
+$color_4: black;
+$color_5: cornflowerblue;
+$color_6: #4a6fad;
+$color_7: #7e7f86;
+$background-color_1: #282c34;
+$background-color_2: #ff94b6;
+$background-color_3: cornflowerblue;
+$background-color_4: grey;
+$border-color_1: #282c34;
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.container {
+    max-width: 500px;
+    margin: 100px auto 25px;
+    padding: 50px;
+    color: $color_1;
+    background-color: $background-color_1;
+    border-radius: 5px;
+}
+.imageContainer {
+    display: flex;
+    justify-content: center;
+}
+.imageCircle {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    background-color: $background-color_2;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.image {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    object-position: center top;
+}
+.error {
+    color: $color_2;
+    font-size: 14px;
+    text-align: left;
+}
+.fullNameInputs {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    overflow: hidden;
+    gap: 15px;
+}
+.inputAuth {
+    position: relative;
+    padding: 10px 10px 10px;
+    width: 100%;
+    border-radius: 10px;
+    border: 3px solid #4f556e;
+    font-size: 16px;
+    color: $color_1;
+    background: transparent;
+    flex: 1;
+    &::placeholder {
+        border-color: $border-color_1;
+        font-weight: bold;
+        color: $color_3;
+    }
+    &:focus {
+        border: 3px solid #c8c8c8;
+        transition: 0.5s;
+    }
+}
+.labelCheckbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    p {
+        margin-left: 10px;
+        text-align: left;
+    }
+}
+.checkbox {
+    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+}
+.btn {
+    color: $color_4;
+    background-color: $background-color_3;
+    height: 35px;
+    width: auto;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    &:active {
+        transform: translateY(1px);
+    }
+    &:disabled {
+        background-color: $background-color_4;
+    }
+}
+.links {
+    display: flex;
+    justify-content: right;
+    a {
+        color: $color_5;
+        font-size: 14px;
+        &:hover {
+            color: $color_6;
+        }
+    }
+}
+.footer {
+    padding-top: 30px;
+    color: $color_7;
+    font-size: 14px;
+}
+@media (max-width: 400px) {
+    .fullNameInputs {
+        flex-direction: column;
+    }
+}

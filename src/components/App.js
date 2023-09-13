@@ -5,7 +5,6 @@ import Navbar from "./utils/Navbar";
 import Logging from "./modules/Logging";
 import Registration from "./modules/Registration";
 import HomePage from "./modules/HomePage";
-// import { FormProvider } from 'react-hook-form';
 
 // Шрифт використовується Roboto
 
